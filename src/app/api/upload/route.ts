@@ -29,21 +29,19 @@ export async function POST(req: any, res: any) {
 
   // ファイルの処理
   const { searchParams } = new URL(req.url);
-  const fileName = searchParams.get("filename") || "ファイル名がないよ";
   const formData = await req.formData();
   const file: any = formData.get("file");
 
   // File オブジェクトから Buffer に変換
   const buffer = Buffer.from(await file?.arrayBuffer());
 
+  const startTime = Date.now(); // アップロード開始時のタイムスタンプ
+
   const bucketParams = {
     Bucket: s3BucketName,
-    Key: fileName,
+    Key: `${startTime}_move`,
     Body: buffer,
   };
-
-  const startTime = Date.now(); // アップロード開始時のタイムスタンプ
-  
 
   console.log("S3アップロード開始")
   const data = await s3Client.send(new PutObjectCommand(bucketParams));
