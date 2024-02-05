@@ -10,6 +10,7 @@ import { NextResponse } from 'next/server';
 
 // 動画に関する
 import * as fs from 'fs'
+import { downloadFileFromSupabase } from '@/app/utils/supabaseClient';
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION,
@@ -26,25 +27,43 @@ if (!s3BucketName) {
 
 export async function POST(req: any, res: any) {
 
-
   // ファイルの処理
   const { searchParams } = new URL(req.url);
   const formData = await req.formData();
   const file: any = formData.get("file");
 
   // File オブジェクトから Buffer に変換
-  const buffer = Buffer.from(await file?.arrayBuffer());
+  // const buffer = Buffer.from(await file?.arrayBuffer());
 
-  const startTime = Date.now(); // アップロード開始時のタイムスタンプ
+  const startTimeFileName = Date.now(); // アップロード開始時のタイムスタンプ
 
-  const bucketParams = {
-    Bucket: s3BucketName,
-    Key: `${startTime}_move`,
-    Body: buffer,
-  };
+  // ファイル情報をsupabaseから取得する。
+  const params1 = searchParams.get('filePath')
+  const filePath = `${params1}`;
+
+  let buffer; 
+  let bucketParams;
+  try{
+    console.log(filePath)
+    buffer = await downloadFileFromSupabase(filePath);
+    bucketParams = {
+      Bucket: s3BucketName!,
+      Key: `${startTimeFileName}_move`,
+      Body: buffer!,
+    };
+
+    if(!bucketParams){
+      throw new Error();
+    }
+
+  } catch (error) {
+    console.error(error);
+    throw new Error('supaから動画の取得に失敗');
+  }
 
   console.log("S3アップロード開始")
-  const data = await s3Client.send(new PutObjectCommand(bucketParams));
+  const startTime = Date.now(); // アップロード開始時のタイムスタンプ
+  const data = await s3Client.send(new PutObjectCommand(bucketParams!));
   const endTime = Date.now(); // アップロード完了時のタイムスタンプ
   const uploadDurationMs = endTime - startTime; // アップロードの継続時間（ミリ秒）
   const uploadDurationSeconds = uploadDurationMs / 1000; // アップロードの継続時間（秒）
@@ -53,9 +72,9 @@ export async function POST(req: any, res: any) {
   console.log(`アップロードの所要時間: ${uploadDurationSeconds}秒 (${uploadDurationMs}ミリ秒)`);
   console.log(
     'Successfully uploaded object: ' +
-      bucketParams.Bucket +
+      bucketParams!.Bucket +
       '/' +
-      bucketParams.Key,
+      bucketParams!.Key,
     'Etag: ' + data.ETag
   );
   

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { supabase } from './utils/supabaseClient'; 
 
 export default function Home() {
   const [uploadStatus, setUploadStatus] = useState("");
@@ -19,22 +20,41 @@ export default function Home() {
     const formData = new FormData();
     formData.append('file', file);
 
-    // fetch API を使用してファイルをバックエンドに送信
+    // supabaseバケットにアップロード
+    let filePath;
     try {
-      const response = await fetch(`/api/upload`, {
+      // Supabaseストレージにファイルをアップロード
+      const timestamp = Date.now();
+      filePath = `uploads/${timestamp}_${imageFileName}`;
+      const { error } = await supabase.storage.from('test_movie_buket').upload(filePath, file);
+
+      if (error) {
+        throw error;
+      }
+
+      setUploadStatus('supaにファイルがアップロードされました。');
+    } catch (error) {
+      console.error('supaアップロード中にエラーが発生しました:', error);
+      setUploadStatus('supaアップロード中にエラーが発生しました。');
+    }
+
+    // fetch API を使用してファイルをバックエンドに送信
+    console.log(filePath)
+    try {
+      const response = await fetch(`/api/upload?filePath=${filePath}`, {
         method: 'POST',
         body: formData,
       });
 
       if (response.ok) {
         // アップロード成功
-        setUploadStatus('ファイルがアップロードされました。');
+        setUploadStatus('S3にファイルがアップロードされました。');
       } else {
         // アップロード失敗
-        setUploadStatus('ファイルアップロードに失敗しました。');
+        setUploadStatus('S3のファイルアップロードに失敗しました。');
       }
     } catch (error) {
-      console.error('アップロード中にエラーが発生しました:', error);
+      console.error('S3のアップロード中にエラーが発生しました:', error);
       setUploadStatus('アップロード中にエラーが発生しました。');
     }
   };
