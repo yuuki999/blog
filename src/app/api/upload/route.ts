@@ -38,8 +38,8 @@ export async function POST(req: any, res: any) {
   const startTimeFileName = Date.now(); // アップロード開始時のタイムスタンプ
 
   // ファイル情報をsupabaseから取得する。
-  const params1 = searchParams.get('filePath')
-  const filePath = `${params1}`;
+  const filePath: string = formData.get("filePath"); 
+  console.log(filePath)
 
   let buffer; 
   let bucketParams;

@@ -17,15 +17,17 @@ export default function Home() {
     const imageFileName = file.name;
 
     // FormData オブジェクトを作成し、ファイルを添付
-    const formData = new FormData();
-    formData.append('file', file);
+  
 
     // supabaseバケットにアップロード
     let filePath;
+    const formData = new FormData();
     try {
       // Supabaseストレージにファイルをアップロード
       const timestamp = Date.now();
       filePath = `uploads/${timestamp}_${imageFileName}`;
+      formData.append('file', file);
+      formData.append('filePath', filePath);
       const { error } = await supabase.storage.from('test_movie_buket').upload(filePath, file);
 
       if (error) {
@@ -37,8 +39,6 @@ export default function Home() {
       console.error('supaアップロード中にエラーが発生しました:', error);
       setUploadStatus('supaアップロード中にエラーが発生しました。');
     }
-
-    console.log("test")
 
     // fetch API を使用してファイルをバックエンドに送信
     console.log(filePath)
