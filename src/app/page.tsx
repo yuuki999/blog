@@ -38,6 +38,8 @@ export default function Home() {
       setUploadStatus('supaアップロード中にエラーが発生しました。');
     }
 
+    console.log("test")
+
     // fetch API を使用してファイルをバックエンドに送信
     console.log(filePath)
     try {
