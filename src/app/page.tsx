@@ -26,7 +26,6 @@ export default function Home() {
       // Supabaseストレージにファイルをアップロード
       const timestamp = Date.now();
       filePath = `uploads/${timestamp}_${imageFileName}`;
-      formData.append('file', file);
       formData.append('filePath', filePath);
       const { error } = await supabase.storage.from('test_movie_buket').upload(filePath, file);
 
