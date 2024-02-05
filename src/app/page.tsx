@@ -21,7 +21,7 @@ export default function Home() {
 
     // fetch API を使用してファイルをバックエンドに送信
     try {
-      const response = await fetch(`/api/upload?filename=${imageFileName}`, {
+      const response = await fetch(`/api/upload`, {
         method: 'POST',
         body: formData,
       });
