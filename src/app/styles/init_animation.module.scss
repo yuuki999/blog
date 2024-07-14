@@ -1,0 +1,55 @@
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f8f8;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  animation: fadeOut 0.5s 3s forwards;
+}
+
+.loadingText {
+  font-size: 1.0rem;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+}
+
+.underline {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background-color: #333;
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: drawUnderline 0.5s forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes drawUnderline {
+  to { transform: scaleX(1); }
+}
+
+@keyframes changeColor {
+  to { background-color: white; }
+}
+
+.hiddenContent {
+  display: none;
+}
+
+.visibleContent {
+  display: block;
+}

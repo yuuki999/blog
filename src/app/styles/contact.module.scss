@@ -1,0 +1,256 @@
+.contactContainer {
+  max-width: 800px;
+  margin: 64px auto;
+  padding: 2rem;
+}
+
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  margin-bottom: 0.8rem;
+  font-weight: bold;
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: #f1f1f8;
+}
+
+.formGroup textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.required {
+  color: rgb(254, 43, 43);
+  margin-left: 0.25rem;
+  font-size: 0.8rem;
+  position: relative;
+  top: -0.8px;
+}
+
+.nameInputs {
+  display: flex;
+  gap: 1rem;
+
+  input {
+    flex: 1;
+  }
+}
+
+.submitContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.submitButton {
+  padding: 0.75rem 1.5rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.editButton {
+  padding: 0.75rem 1.5rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #5a6268;
+  }
+}
+
+.radioGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: normal !important;
+  margin-bottom: 0;
+}
+
+.radioInput {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.radioCustom {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 0.5rem;
+  border: 2px solid #007bff;
+  border-radius: 50%;
+}
+
+.radioInput:checked + .radioCustom::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: #007bff;
+  border-radius: 50%;
+}
+
+.radioInput:focus + .radioCustom {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+@media (max-width: 768px) {
+  .contactContainer {
+    padding: 1rem;
+  }
+
+  .radioGroup {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+  }
+
+  .submitButton,
+  .editButton {
+    width: 100%;
+  }
+}
+
+// 確認画面
+.confirmationTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.confirmationContent {
+  margin-bottom: 2rem;
+}
+
+.confirmationItem {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  min-height: 4rem; // 確認項目の最小の高さを設定
+  display: flex;
+  flex-direction: column;
+}
+
+.confirmationLabel {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.confirmationValue {
+  margin: 0;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.confirmationMessage {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+  color: #007bff;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.submitButton, .editButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submitButton {
+  background-color: #007bff;
+  color: white;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+.editButton {
+  background-color: #6c757d;
+  color: white;
+
+  &:hover {
+    background-color: #5a6268;
+  }
+}
+
+.error{
+  margin-top: 4px;
+  font-size: 14px;
+  color: rgb(254, 43, 43);
+}
+
+@media (max-width: 768px) {
+  .contactContainer {
+    padding: 1rem;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+  }
+
+  .submitButton,
+  .editButton {
+    width: 100%;
+  }
+}
