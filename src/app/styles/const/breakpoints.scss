@@ -1,4 +1,5 @@
 // ブレークポイントの定義
+$breakpoint-iphoneSE: 640px;
 $breakpoint-mobile: 767px;
 $breakpoint-tablet: 1023px;
 $breakpoint-desktop: 1024px;
@@ -10,6 +11,12 @@ $breakpoint-desktop: 1024px;
 // メディアクエリ用のmixins
 @mixin mobile {
   @media (max-width: #{$breakpoint-mobile}) {
+    @content;
+  }
+}
+
+@mixin iphoneSE {
+  @media (max-width: #{$breakpoint-iphoneSE}) {
     @content;
   }
 }
