@@ -53,6 +53,25 @@
 .title {
     font-size: 24px;
     color: #333;
+    
+    .homeLink {
+        color: inherit;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+    
+        &:visited {
+          color: inherit; // 訪問済みの色を継承色に保つ
+        }
+    
+        &:hover {
+          opacity: 0.8;
+          text-decoration: none; // ホバー時も下線を表示しない
+        }
+    
+        &:active {
+          color: inherit; // クリック時の色も継承色に保つ
+        }
+      }
 
     @include mobile {
         font-size: 18px;

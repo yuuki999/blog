@@ -68,7 +68,7 @@ export default function ContactPage() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ContactForm onSubmit={handleFormSubmit} initialData={formData} />;
+      <ContactForm onSubmit={handleFormSubmit} initialData={formData} />
     </Suspense>
   )
 }

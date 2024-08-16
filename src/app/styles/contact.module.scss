@@ -22,7 +22,6 @@
 
 .formGroup input,
 .formGroup textarea {
-  width: 100%;
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -46,9 +45,11 @@
 .nameInputs {
   display: flex;
   gap: 1rem;
+  width: 100%;
 
   input {
     flex: 1;
+    min-width: 0;
   }
 }
 
