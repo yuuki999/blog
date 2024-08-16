@@ -27,7 +27,6 @@ function Profile() {
                 TypeScriptやReact、Next.jsを使用したフロントエンド開発を主に担当しております。
                 また、Laravelを用いたAPI開発やAWSを活用したインフラ構築にも携わってきておりました。<br/>
                 趣味は筋トレと猫の動画を見ることです。<br/>
-                マンチカンとサイベリアンがかわいいなと思っています。
                 </p>
             </div>
         </section>

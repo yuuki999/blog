@@ -5,6 +5,7 @@ import ConditionalInitAnimation from "./components/animation/ConditionalInitAnim
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import styles from './styles/base.module.scss';
+import ScrollToTopButton from "./components/ScrollToTopButton";
 
 export const metadata: Metadata = {
   title: "HARU TECHNOLOGY",
@@ -28,6 +29,7 @@ export default function RootLayout({
             <Header />
             {children}
             <Footer />
+            <ScrollToTopButton />
           </main>
         </ConditionalInitAnimation>
       </body>

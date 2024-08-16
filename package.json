@@ -19,6 +19,7 @@
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-scroll-to-top": "^3.0.0",
     "resend": "^3.4.0",
     "s3": "^4.4.0",
     "sass": "^1.77.6",
