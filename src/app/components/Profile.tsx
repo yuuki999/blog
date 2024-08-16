@@ -1,10 +1,15 @@
+"use client";
+
 import React from 'react';
 import styles from '../styles/profile.module.scss';
 import Image from 'next/image';
+import { mediaQuery, useMediaQuery } from '../hooks/useMediaQuery';
 
 function Profile() {
+    const isMobile = useMediaQuery(mediaQuery.sp);
+
     return (
-        <section id="about" className={styles.profile}>
+        <section id="about" className={`${styles.profile} ${isMobile ? styles.mobile : ''}`}>
             <div className={styles.profile_image}>
               <Image
                 src="/images/profile.jpeg"

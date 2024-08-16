@@ -236,6 +236,10 @@
 
 .title_text{
     margin: 144px 0 304px 0;
+
+    @include mobile {
+        margin: 144px 0 100px 0;
+    }
 }
 
 .icon {

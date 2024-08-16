@@ -1,17 +1,30 @@
+@import './const/breakpoints';
+
 .profile {
   margin: 104px 0;
   display: flex;
   align-items: center;
   justify-content: center; /* 左右中央に配置 */
   padding: 20px;
+
+  @include mobile {
+    flex-direction: column;
+  }
 }
 
 .profile_image {
   width: 300px;
   height: 350px;
-  // border-radius: 50%;
   overflow: hidden;
   margin-right: 94px; /* 写真と紹介文の間のスペース */
+
+  @include mobile {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
 }
 
 .profile_image img {
@@ -24,6 +37,10 @@
   display: flex;
   flex-direction: column;
   width: 500px;
+
+  @include mobile {
+    width: 100%;
+  }
 }
 
 .profile_details h2 {
