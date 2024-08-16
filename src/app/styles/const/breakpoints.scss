@@ -1,0 +1,41 @@
+// ブレークポイントの定義
+$breakpoint-mobile: 767px;
+$breakpoint-tablet: 1023px;
+$breakpoint-desktop: 1024px;
+
+// `@mixin`は、再利用可能なスタイルのグループを定義するためのSCSSの機能です。
+// コードの繰り返しを減らし、保守性を高めるのに役立ちます。
+// `@include`ディレクティブを使用して、定義したmixinを他の場所で使用できます。
+
+// メディアクエリ用のmixins
+@mixin mobile {
+  @media (max-width: #{$breakpoint-mobile}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$breakpoint-mobile + 1}) and (max-width: #{$breakpoint-tablet}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$breakpoint-desktop}) {
+    @content;
+  }
+}
+
+// 特定の幅以下のデバイス用（モバイルとタブレット）
+@mixin mobile-tablet {
+  @media (max-width: #{$breakpoint-tablet}) {
+    @content;
+  }
+}
+
+// カスタムブレークポイント用
+@mixin custom-media($min, $max) {
+  @media (min-width: $min) and (max-width: $max) {
+    @content;
+  }
+}

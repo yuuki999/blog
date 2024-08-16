@@ -1,22 +1,62 @@
+@import './const/breakpoints';
+
 .main {
     margin: 0 200px;
     color: #505050 !important;
+
+    @include mobile {
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 0 4px;
+    }
 }
 
 .header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    flex-direction: column;
     padding: 100px 20px;
 
-    @media (max-width: 768px) {
+    @include mobile {
         flex-direction: column;
+        align-items: flex-start;
+        padding: 4px 20px;
     }
+}
+
+.oneRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.topRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+
+    @include mobile {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.bottomRow {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
 }
   
 .title {
     font-size: 24px;
     color: #333;
+
+    @include mobile {
+        font-size: 18px;
+    }
 }
 
 .subtitle {

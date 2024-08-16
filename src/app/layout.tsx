@@ -5,7 +5,6 @@ import ConditionalInitAnimation from "./components/animation/ConditionalInitAnim
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import styles from './styles/base.module.scss';
-import Navigation from "./components/Navigation";
 
 export const metadata: Metadata = {
   title: "HARU TECHNOLOGY",
@@ -27,7 +26,6 @@ export default function RootLayout({
         <ConditionalInitAnimation>
           <main className={styles.main}>
             <Header />
-            <Navigation />
             {children}
             <Footer />
           </main>
