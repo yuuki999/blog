@@ -6,6 +6,7 @@ import navStyles from '../styles/navigation.module.scss';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMediaQuery, mediaQuery } from '../hooks/useMediaQuery';
+import FullScreenMenu from './FullScreenMenu';
 import { Menu } from 'lucide-react';
 
 const navItems = [
@@ -58,32 +59,7 @@ function Navigation() {
               <span className={navStyles.menuText}>Menu</span>
               <Menu size={24} />
             </button>
-            {isMenuOpen && (
-              <div className={styles.mobileMenu}>
-                <Link href="/" className={styles.navItem}>HOME</Link>
-                {visibleItems.map(item => (
-                  item.isInternal ? (
-                    <a
-                      key={item.id}
-                      href={`#${item.id}`}
-                      onClick={scrollToSection(item.id)}
-                      className={styles.navItem}
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
-                    <Link
-                      key={item.id}
-                      href={item.href || '/'}
-                      className={styles.navItem}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  )
-                ))}
-              </div>
-            )}
+            <FullScreenMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
           </>
         ) : (
           <>
