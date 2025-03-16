@@ -62,18 +62,13 @@ function Services() {
       <p className={styles.serviceIntro}>
         予算、納期、カスタマイズ性に応じて、最適なwebサイト構築プランをご提案します。<br/>
         システムに関するご依頼が初めての方は、お気軽に無料相談からお問い合わせください。<br/>
-        またその他プランでも、ご相談に関しては無料で実施いたしますのでご安心ください。
       </p>
       
-      <div className={styles.servicesGrid}>
+      {/* <div className={styles.servicesGrid}>
         {serviceItems.map((item, index) => (
           <ServiceItem key={index} item={item} />
         ))}
-      </div>
-      
-      <p className={styles.serviceOutro}>
-        各プランは柔軟にカスタマイズ可能です。ニーズに合わせて最適なソリューションを提供いたします。
-      </p>
+      </div> */}
     </section>
   );
 }
