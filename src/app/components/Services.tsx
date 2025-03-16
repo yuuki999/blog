@@ -13,30 +13,30 @@ type ServiceItem = {
 
 const serviceItems: ServiceItem[] = [
   {
-    title: "無料相談",
+    title: "大宮・埼玉 無料IT相談",
     // icon: "/images/consultation.svg",
-    description: "お客様のニーズや予算、目標をヒアリングし、最適なwebサイト・システム構築プランをご提案します。その他のご相談も承ります。",
+    description: "大宮市を中心とした埼玉県内のお客様のニーズや予算、目標をヒアリングし、最適なWebサイト・システム構築プランをご提案します。地域ビジネスに特化したIT相談を承ります。",
     price: "無料",
     value: "free_consultation"
   },
   {
-    title: "テンプレートプラン",
+    title: "大宮向けテンプレートプラン",
     // icon: "/images/template.svg",
-    description: "既存のテンプレートをベースに、迅速かつコスト効率の良いwebサイトを構築します。",
+    description: "埼玉県大宮市の地域ビジネスに最適化された既存のテンプレートをベースに、迅速かつコスト効率の良いWebサイトを構築します。地域SEO対策込み。",
     price: "プラン A",
     value: "template_plan"
   },
   {
-    title: "フルカスタマイズ",
+    title: "埼玉ビジネス向けフルカスタマイズ",
     // icon: "/images/custom.svg",
-    description: "完全にフルスクラッチでwebサイト・システムを構築いたします。柔軟なデザイン、機能を追加することが可能です。",
+    description: "大宮・埼玉のビジネスニーズに合わせて、完全にフルスクラッチでWebサイト・システムを構築いたします。地域特性を活かした柔軟なデザイン、機能を追加することが可能です。",
     price: "プラン B",
     value: "full_customization"
   },
   {
-    title: "改修・リプレイス",
+    title: "大宮エリア 改修・リプレイス",
     // icon: "/images/upgrade.svg",
-    description: "既存のwebサイトの改善、最新技術へのアップグレード、全面的なリニューアル・データベースのパフォーマンス改善等に対応します。",
+    description: "埼玉県大宮市周辺のビジネス向けに、既存のWebサイトの改善、最新技術へのアップグレード、全面的なリニューアル・データベースのパフォーマンス改善等に対応します。",
     price: "プラン C",
     value: "upgrade_replace"
   }

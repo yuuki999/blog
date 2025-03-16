@@ -8,8 +8,17 @@ import styles from './styles/base.module.scss';
 import ScrollToTopButton from "./components/ScrollToTopButton";
 
 export const metadata: Metadata = {
-  title: "HARU TECHNOLOGY",
-  description: "エンジニアブログサイト",
+  title: "大宮システム開発・Web制作 | HARU TECHNOLOGY",
+  description: "埼玉県大宮市を拠点とするシステム開発・Web制作サービス。無料相談から本格的なカスタム開発まで、あらゆるIT課題に対応します。埼玉県内のビジネスに最適なWeb・システムソリューションをご提供。",
+  keywords: "大宮, システム開発, Web制作, IT相談, 埼玉, カスタム開発, ホームページ制作",
+  openGraph: {
+    title: "大宮システム開発・Web制作 | HARU TECHNOLOGY",
+    description: "埼玉県大宮市を拠点とするシステム開発・Web制作サービス。無料相談から本格的なカスタム開発まで、あらゆるIT課題に対応します。",
+    url: "https://www.yuki-engineer.com/",
+    siteName: "HARU TECHNOLOGY",
+    locale: "ja_JP",
+    type: "website",
+  },
 };
 
 // RSC

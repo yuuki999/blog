@@ -16,14 +16,14 @@ function Header() {
         {isMobile ? (
           <>
             <div className={styles.oneRow}>
-              <h1 className={styles.title}> <Link href="/" className={styles.homeLink}>HARU TECHNOLOGY</Link></h1>
+              <h1 className={styles.title}> <Link href="/" className={styles.homeLink}>HARU TECHNOLOGY<span className={styles.subtitle_region}>大宮・埼玉のシステム開発</span></Link></h1>
               <Navigation />
             </div>
           </>
         ) : (
           <>
             <div className={styles.topRow}>
-              <h1 className={styles.title}> <Link href="/" className={styles.homeLink}>HARU TECHNOLOGY</Link></h1>
+              <h1 className={styles.title}> <Link href="/" className={styles.homeLink}>HARU TECHNOLOGY<span className={styles.subtitle_region}>大宮・埼玉のシステム開発</span></Link></h1>
               <div className={styles.subtitle}>
                 <a href="https://twitter.com/haru_tech9999" target="_blank" rel="noopener noreferrer">
                   <XIcon className={styles.icon} />
