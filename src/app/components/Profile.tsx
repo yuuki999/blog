@@ -12,7 +12,7 @@ function Profile() {
         <section id="about" className={`${styles.profile} ${isMobile ? styles.mobile : ''}`}>
             <div className={styles.profile_image}>
               <Image
-                src="/images/dog.jpeg"
+                src="/images/profile.jpeg"
                 alt="yuuki san"
                 layout="intrinsic"
                 width={300}
