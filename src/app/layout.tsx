@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import styles from './styles/base.module.scss';
 import ScrollToTopButton from "./components/ScrollToTopButton";
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: "大宮システム開発・Web制作 | HARU TECHNOLOGY",
@@ -41,6 +42,7 @@ export default function RootLayout({
             <ScrollToTopButton />
           </main>
         </ConditionalInitAnimation>
+        <Analytics />
       </body>
     </html>
   );
