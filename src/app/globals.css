@@ -4,8 +4,8 @@
 /* カスタムスタイル */
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 30, 41, 59; /* 背景色を明るくしました (slate-800 相当) */
-  --background-end-rgb: 15, 23, 42; /* 背景のグラデーションを調敵 (slate-900 相当) */
+  --background-start-rgb: 15, 23, 42; /* 背景色を濃くしました (slate-900 相当) */
+  --background-end-rgb: 10, 15, 30; /* 背景のグラデーションをより濃く調敵 */
 }
 
 /* 基本スタイルのリセット - Tailwindのプリフライトと競合しないように調整 */
