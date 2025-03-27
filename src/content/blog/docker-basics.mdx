@@ -1,0 +1,66 @@
+---
+title: 'Dockeru306eu57fau672cu3068u5b9fu8df5u7684u306au4f7fu3044u65b9'
+date: '2025-03-24'
+excerpt: 'Dockeru306eu57fau672cu7684u306au6982u5ff5u3068u5b9fu8df5u7684u306au4f7fu3044u65b9u306bu3064u3044u3066u89e3u8aacu3057u307eu3059u3002'
+tags: ['Docker', 'u30b3u30f3u30c6u30ca', 'DevOps']
+---
+
+# Dockeru306eu57fau672cu3068u5b9fu8df5u7684u306au4f7fu3044u65b9
+
+Dockeru306fu30a2u30d7u30eau30b1u30fcu30b7u30e7u30f3u3092u30b3u30f3u30c6u30cau5316u3057u3066u5b9fu884cu3059u308bu30d7u30e9u30c3u30c8u30d5u30a9u30fcu30e0u3067u3059u3002u74b0u5883u306eu518du73feu6027u3068u30ddu30fcu30bfu30d3u30eau30c6u30a3u3092u5411u4e0au3055u305bu307eu3059u3002
+
+## u57fau672cu7684u306au30b3u30deu30f3u30c9
+
+```bash
+# u30a4u30e1u30fcu30b8u306eu53d6u5f97
+docker pull nginx
+
+# u30b3u30f3u30c6u30cau306eu5b9fu884c
+docker run -d -p 80:80 --name my-nginx nginx
+
+# u30b3u30f3u30c6u30cau306eu4e00u89a7u8868u793a
+docker ps
+
+# u30b3u30f3u30c6u30cau306eu505cu6b62
+docker stop my-nginx
+```
+
+## Dockerfileu306eu4f8b
+
+```dockerfile
+FROM node:14
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
+
+## Docker Compose
+
+```yaml
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: example
+```
+
+## u307eu3068u3081
+
+Dockeru3092u4f7fu3046u3053u3068u3067u3001u958bu767au74b0u5883u3068u672cu756au74b0u5883u306eu5deeu5206u3092u6700u5c0fu5316u3057u3001u30a2u30d7u30eau30b1u30fcu30b7u30e7u30f3u306eu30c7u30d7u30edu30a4u3092u5bb9u6613u306bu3057u307eu3059u3002

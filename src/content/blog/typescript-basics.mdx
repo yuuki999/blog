@@ -1,0 +1,53 @@
+---
+title: 'TypeScriptの基礎知識'
+date: '2025-03-26'
+excerpt: 'TypeScriptの基本的な型システムと使い方について解説します。'
+tags: ['TypeScript', 'JavaScript', '型システム']
+---
+
+# TypeScriptの基礎知識
+
+TypeScriptはJavaScriptに静的型付けを追加した言語です。型安全性を確保しながら、大規模なアプリケーション開発を可能にします。
+
+## 基本的な型
+
+```typescript
+// 基本的な型
+let name: string = 'John';
+let age: number = 30;
+let isActive: boolean = true;
+
+// 配列
+let numbers: number[] = [1, 2, 3];
+let names: Array<string> = ['Alice', 'Bob'];
+
+// タプル
+let person: [string, number] = ['John', 30];
+
+// オブジェクト
+let user: { name: string; age: number } = {
+  name: 'John',
+  age: 30
+};
+```
+
+## インターフェースと型エイリアス
+
+```typescript
+// インターフェース
+interface User {
+  name: string;
+  age: number;
+  greet(): void;
+}
+
+// 型エイリアス
+type Point = {
+  x: number;
+  y: number;
+};
+```
+
+## まとめ
+
+TypeScriptを使うことで、コード品質の向上とバグの早期発見が可能になります。
