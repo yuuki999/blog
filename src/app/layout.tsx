@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import React from "react";
 import "./globals.css";
+import "./styles/links.css"; // リンクスタイルを追加
 import ConditionalInitAnimation from "./components/animation/ConditionalInitAnimation";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
