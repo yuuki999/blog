@@ -95,7 +95,7 @@ export default async function PostsPage() {
                     </span>
                   </td>
                   <td className="py-3 px-4 text-gray-300">
-                    {post.updated_at ? formatDate(post.updated_at) : '-'}
+                    {post.updated_at ? formatDate(post.updated_at, true) : '-'}
                   </td>
                   <td className="py-3 px-4">
                     <div className="flex flex-wrap gap-1">

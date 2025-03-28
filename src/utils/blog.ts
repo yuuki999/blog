@@ -70,9 +70,12 @@ export function getAllPostSlugs() {
 }
 
 // 日付をフォーマットする関数
-export function formatDate(dateString: string): string {
+export function formatDate(dateString: string, includeTime: boolean = false): string {
   const date = parseISO(dateString);
-  return format(date, 'yyyy年MM月dd日', { locale: ja });
+  const formatString = includeTime 
+    ? 'yyyy年MM月dd日 HH:mm' 
+    : 'yyyy年MM月dd日';
+  return format(date, formatString, { locale: ja });
 }
 
 // 相対的な時間表示を行う関数

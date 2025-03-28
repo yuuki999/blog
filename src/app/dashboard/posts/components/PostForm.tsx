@@ -9,6 +9,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import TagSelector from './TagSelector';
 import ImageUploader from './ImageUploader';
+import { revalidateBlogCache } from '../actions';
 
 // フォームのバリデーションスキーマ
 const postSchema = z.object({
@@ -92,12 +93,18 @@ export default function PostForm({ post }: PostFormProps) {
       
       setSuccess('記事が保存されました');
       
-      // 新規作成の場合は編集ページにリダイレクト
+      // サーバーサイドのキャッシュを再検証
+      await revalidateBlogCache(data.slug);
+      
+      // クライアントサイドのキャッシュも更新
+      router.refresh();
+      
+      // 新規作成の場合は成功メッセージ表示後に一覧画面にリダイレクト
       if (!data.id && result.id) {
-        router.push(`/dashboard/posts/${result.id}`);
-      } else {
-        // キャッシュを更新
-        router.refresh();
+        // 成功メッセージを表示するために少し待つ
+        setTimeout(() => {
+          router.push('/dashboard/posts');
+        }, 1500); // 1.5秒後に一覧画面にリダイレクト
       }
     } catch (error: any) {
       setError(error.message);
