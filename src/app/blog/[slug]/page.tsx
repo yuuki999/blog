@@ -67,10 +67,31 @@ export default async function BlogPost({ params }: { params: { slug: string } })
           </Link>
         </div>
         
-        {/* 記事ヘッダー - 画像のようなシンプルなデザイン */}
-        <div className="rounded-lg p-8 mb-8">
+        {/* 記事ヘッダー - タイトルを先に表示するデザイン */}
+        <div className="rounded-lg p-8 mb-8 bg-slate-900/50">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">{post.frontmatter.title}</h1>
-          <p className="text-gray-400 text-sm">{formatDate(post.frontmatter.date)}</p>
+          <p className="text-gray-400 text-sm mb-4">{formatDate(post.frontmatter.date)}</p>
+          {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-6">
+              {post.frontmatter.tags.map((tag: string) => (
+                <span key={tag} className="px-3 py-1 bg-blue-900/30 text-blue-300 text-xs rounded-full">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+          
+          {post.frontmatter.thumbnail && (
+            <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden">
+              <Image
+                src={post.frontmatter.thumbnail}
+                alt={post.frontmatter.title}
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+          )}
         </div>
         
         {/* 記事本文 */}

@@ -5,16 +5,25 @@ const nextConfig = {
   
   // 画像ドメインの設定
   images: {
-    domains: ['storage.screenshotapi.net'],
+    domains: [
+      'storage.screenshotapi.net',
+      'mizs5weedkzw53f0.public.blob.vercel-storage.com', // Vercel Blob Storageのホスト名
+    ],
     // SVG画像のサポートを有効化
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    // または、より詳細な設定が必要な場合は remotePatterns を使用
+    // より安全な設定としてremotePatternsを使用することも可能
     // remotePatterns: [
     //   {
     //     protocol: 'https',
     //     hostname: 'storage.screenshotapi.net',
+    //     port: '',
+    //     pathname: '/**',
+    //   },
+    //   {
+    //     protocol: 'https',
+    //     hostname: '*.public.blob.vercel-storage.com',
     //     port: '',
     //     pathname: '/**',
     //   },
