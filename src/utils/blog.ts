@@ -24,6 +24,7 @@ export function getBlogPosts(): BlogPost[] {
         date: data.date,
         excerpt: data.excerpt,
         tags: data.tags || [],
+        thumbnail: data.thumbnail || null, // サムネイル情報を追加
       };
     });
   
@@ -47,6 +48,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPostDetail | null
         date: data.date,
         excerpt: data.excerpt,
         tags: data.tags || [],
+        thumbnail: data.thumbnail || null, // サムネイル情報を追加
       },
       content,
     };
