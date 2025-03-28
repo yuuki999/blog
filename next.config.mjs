@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
-
 const nextConfig = {
-  // MDXファイルをサポートするための設定
-  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  // ページ拡張子の設定
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
   
   // 画像ドメインの設定
   images: {
@@ -20,6 +19,14 @@ const nextConfig = {
     //     pathname: '/**',
     //   },
     // ],
+  },
+  
+  // React Markdownを使用するための設定
+  // webpackの設定をカスタマイズして、シンタックスハイライターをサポート
+  webpack: (config) => {
+    // クライアントサイドでのみ必要なモジュールを処理
+    config.resolve.fallback = { fs: false, path: false };
+    return config;
   },
 };
 
