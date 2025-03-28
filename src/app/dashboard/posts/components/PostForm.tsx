@@ -339,7 +339,7 @@ export default function PostForm({ post }: PostFormProps) {
                                 li: ({node, ...props}) => <li className="my-1" {...props} />,
                                 a: ({node, ...props}) => <a className="text-blue-500 hover:underline" {...props} />,
                                 blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-gray-300 pl-4 my-2 italic" {...props} />,
-                                code: ({inline, className, children, ...props}) => {
+                                code: ({inline, className, children, ...props}: any) => {
                                   const match = /language-(\w+)/.exec(className || '');
                                   return !inline ? (
                                     <pre className="bg-gray-100 dark:bg-gray-800 p-2 rounded overflow-auto my-2">
