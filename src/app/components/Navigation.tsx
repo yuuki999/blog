@@ -13,6 +13,7 @@ const navItems = [
   { id: 'service', label: 'Service', isInternal: true },
   { id: 'about', label: 'Profile', isInternal: true },
   { id: 'works', label: 'Works', isInternal: true },
+  { id: 'blog', label: 'Blog', isInternal: false, href: '/blog' },
   { id: 'contact', label: 'Contact', isInternal: false, href: '/contact' }
 ];
 

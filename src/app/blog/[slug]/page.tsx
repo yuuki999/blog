@@ -44,12 +44,28 @@ export default async function BlogPost({ params }: { params: { slug: string } })
   return (
     <div className="min-h-screen">
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <Link href="/blog" className="text-white hover:text-gray-300 mb-6 inline-flex items-center text-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          ブログ一覧に戻る
-        </Link>
+        <div className="mb-8">
+          <Link 
+            href="/blog" 
+            className="group inline-flex items-center px-4 py-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 transition-all duration-200 text-gray-300 hover:text-white border border-slate-700 hover:border-blue-500 shadow-sm"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform duration-200" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M10 19l-7-7m0 0l7-7m-7 7h18" 
+              />
+            </svg>
+            <span className="font-medium">ブログ一覧に戻る</span>
+          </Link>
+        </div>
         
         {/* 記事ヘッダー - 画像のようなシンプルなデザイン */}
         <div className="rounded-lg p-8 mb-8">

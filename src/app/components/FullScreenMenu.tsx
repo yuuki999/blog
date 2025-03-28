@@ -64,6 +64,12 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                 </a>
               </li>
               <li>
+                <a href="/blog" onClick={(e) => handleLinkClick(e, '/blog')}>
+                  <span className={styles.menuText}>Blog</span>
+                  <ArrowRight size={24} className={styles.menuIcon} />
+                </a>
+              </li>
+              <li>
                 <a href="/contact" onClick={(e) => handleLinkClick(e, '/contact')}>
                   <span className={styles.menuText}>Contact</span>
                   <ArrowRight size={24} className={styles.menuIcon} />
