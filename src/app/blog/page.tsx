@@ -2,6 +2,7 @@ import { getBlogPosts } from '@/utils/blog';
 import BlogCard from '../components/BlogCard';
 import Link from 'next/link';
 import Pagination from '../components/Pagination';
+import TagList from '../components/TagList';
 
 export const metadata = {
   title: 'すべての記事 | HARU TECHNOLOGY',
@@ -43,16 +44,22 @@ export default function BlogPage({ searchParams }: { searchParams: { page?: stri
             <Pagination currentPage={currentPage} totalPages={totalPages} />
           </div>
           
-          {/* 右側: 最新の記事 - モバイルでは非表示 */}
+          {/* 右側: 最新の記事とタグ一覧 - モバイルでは非表示 */}
           <div className="hidden md:block md:w-4/12 mt-0">
             <h2 className="text-2xl font-bold text-white mb-8">最新の記事</h2>
-            <div className="space-y-4">
+            <div className="space-y-4 mb-8">
               {allPosts.slice(0, 2).map((post) => (
                 <div key={`latest-${post.slug}`} className="bg-slate-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transform hover:scale-102 transition-all duration-300">
                   <BlogCard post={post} />
                 </div>
               ))}
             </div>
+            
+            {/* タグ一覧 */}
+            <TagList 
+              tags={allPosts.flatMap(post => post.tags || [])} 
+              className="bg-slate-800 rounded-lg p-6 mt-8" 
+            />
           </div>
         </div>
       </div>
