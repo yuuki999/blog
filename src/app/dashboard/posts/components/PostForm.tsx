@@ -10,6 +10,8 @@ import Image from 'next/image';
 import TagSelector from './TagSelector';
 import ImageUploader from './ImageUploader';
 import { revalidateBlogCache } from '../actions';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // フォームのバリデーションスキーマ
 const postSchema = z.object({
@@ -36,6 +38,7 @@ export default function PostForm({ post }: PostFormProps) {
   const [success, setSuccess] = useState<string | null>(null);
   const [availableTags, setAvailableTags] = useState<string[]>([]);
   const [showImageUploader, setShowImageUploader] = useState(false);
+  const [editorView, setEditorView] = useState<'edit' | 'split' | 'preview'>('split');
   
   // React Hook Formの設定
   const { 
@@ -61,8 +64,7 @@ export default function PostForm({ post }: PostFormProps) {
   
   const watchTags = watch('tags');
   const watchThumbnail = watch('thumbnail_url');
-  
-
+  const watchContent = watch('content');
   
   // フォーム送信処理
   const onSubmit = async (data: PostFormData) => {
@@ -245,13 +247,90 @@ export default function PostForm({ post }: PostFormProps) {
       
       {/* 本文 */}
       <div>
-        <label htmlFor="content" className="block text-white font-medium mb-2">本文 (Markdown形式)</label>
-        <textarea
-          id="content"
-          {...register('content')}
-          rows={15}
-          className="w-full px-4 py-2 bg-slate-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
-        />
+        <div className="flex justify-between items-center mb-2">
+          <label htmlFor="content" className="text-white font-medium">本文 (Markdown形式)</label>
+          <div className="flex bg-slate-800 rounded-lg overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setEditorView('edit')}
+              className={`px-3 py-1 text-sm ${editorView === 'edit' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700'}`}
+            >
+              エディタ
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditorView('split')}
+              className={`px-3 py-1 text-sm ${editorView === 'split' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700'}`}
+            >
+              分割表示
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditorView('preview')}
+              className={`px-3 py-1 text-sm ${editorView === 'preview' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700'}`}
+            >
+              プレビュー
+            </button>
+          </div>
+        </div>
+        
+        <div className={`${editorView === 'split' ? 'md:grid md:grid-cols-2 md:gap-4' : 'block'}`}>
+          {/* エディタ */}
+          {(editorView === 'edit' || editorView === 'split') && (
+            <div className="mb-4 md:mb-0">
+              <textarea
+                id="content"
+                {...register('content')}
+                rows={15}
+                className="w-full px-4 py-2 bg-slate-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+              />
+            </div>
+          )}
+          
+          {/* プレビュー */}
+          {(editorView === 'preview' || editorView === 'split') && (
+            <div className="bg-white dark:bg-slate-800 rounded-md overflow-hidden border border-slate-300 dark:border-slate-600">
+              <div className="p-4 prose prose-slate prose-sm max-w-none text-gray-800 dark:prose-invert dark:text-gray-200">
+                {watchContent ? (
+                  <div className="break-words">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        p: ({node, ...props}) => <p className="my-2" {...props} />,
+                        h1: ({node, ...props}) => <h1 className="text-2xl font-bold mt-4 mb-2" {...props} />,
+                        h2: ({node, ...props}) => <h2 className="text-xl font-bold mt-3 mb-2" {...props} />,
+                        ul: ({node, ...props}) => <ul className="list-disc pl-5 my-2" {...props} />,
+                        ol: ({node, ...props}) => <ol className="list-decimal pl-5 my-2" {...props} />,
+                        li: ({node, ...props}) => <li className="my-1" {...props} />,
+                        a: ({node, ...props}) => <a className="text-blue-500 hover:underline" {...props} />,
+                        blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-gray-300 pl-4 my-2 italic" {...props} />,
+                        code: ({inline, className, children, ...props}) => {
+                          const match = /language-(\w+)/.exec(className || '');
+                          return !inline ? (
+                            <pre className="bg-gray-100 dark:bg-gray-800 p-2 rounded overflow-auto my-2">
+                              <code className={className} {...props}>
+                                {children}
+                              </code>
+                            </pre>
+                          ) : (
+                            <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded" {...props}>
+                              {children}
+                            </code>
+                          );
+                        }
+                      }}
+                    >
+                      {watchContent}
+                    </ReactMarkdown>
+                  </div>
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400 italic">プレビューはここに表示されます。Markdownを入力してください。</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+        
         {errors.content && (
           <p className="text-red-400 text-sm mt-1">{errors.content.message}</p>
         )}
