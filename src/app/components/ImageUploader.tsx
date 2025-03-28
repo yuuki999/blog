@@ -18,16 +18,7 @@ export default function ImageUploader() {
     setError(null);
     
     try {
-      // 一時的に静的画像を使用（Vercel Blob Storageの設定が完了するまで）
-      const timestamp = Date.now();
-      const fileName = file.name.replace(/[^a-zA-Z0-9.]/g, '-');
-      
-      // デモ用に静的画像を使用
-      const demoImageUrl = `/images/profile.jpeg?t=${timestamp}`;
-      setUploadedUrl(demoImageUrl);
-      
       // 以下は本番環境用のコード（現在はコメントアウト）
-      /*
       const formData = new FormData();
       formData.append('file', file);
 
@@ -43,7 +34,6 @@ export default function ImageUploader() {
 
       const blob = await response.json();
       setUploadedUrl(blob.url);
-      */
     } catch (error) {
       console.error('エラー:', error);
       setError(error instanceof Error ? error.message : 'アップロードに失敗しました');
