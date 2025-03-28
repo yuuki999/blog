@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { supabase } from '@/utils/supabase';
+import { supabaseAdmin } from '@/utils/supabase-admin';
 import { formatDate } from '@/utils/blog';
 import { revalidatePath } from 'next/cache';
+import DeletePostButton from './components/DeletePostButton';
 
 // 記事削除のServer Action
 async function deletePost(formData: FormData) {
@@ -13,13 +15,13 @@ async function deletePost(formData: FormData) {
   
   try {
     // 記事とタグの関連付けを削除
-    await supabase
+    await supabaseAdmin
       .from('post_tags')
       .delete()
       .eq('post_id', id);
     
     // 記事を削除
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('posts')
       .delete()
       .eq('id', id);
@@ -40,8 +42,8 @@ async function deletePost(formData: FormData) {
 }
 
 export default async function PostsPage() {
-  // 記事一覧を取得
-  const { data: posts, error } = await supabase
+  // 記事一覧を取得（管理者権限で）
+  const { data: posts, error } = await supabaseAdmin
     .from('posts')
     .select(`
       *,
@@ -116,20 +118,7 @@ export default async function PostsPage() {
                       >
                         編集
                       </Link>
-                      <form action={deletePost}>
-                        <input type="hidden" name="id" value={post.id} />
-                        <button 
-                          type="submit"
-                          className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
-                          onClick={(e) => {
-                            if (!confirm('この記事を削除してもよろしいですか？')) {
-                              e.preventDefault();
-                            }
-                          }}
-                        >
-                          削除
-                        </button>
-                      </form>
+                      <DeletePostButton postId={post.id} deletePost={deletePost} />
                       {post.status === 'published' && (
                         <Link 
                           href={`/blog/${post.slug}`}

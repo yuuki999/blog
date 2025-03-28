@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { getPostBySlug, getAllPostSlugs, formatDate } from '@/utils/blog';
+import { getSupabasePostBySlug, getSupabaseAllPostSlugs } from '@/utils/supabase-blog';
+import { formatDate } from '@/utils/blog';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -13,7 +14,7 @@ const MarkdownContent = dynamic(() => import('@/components/MarkdownContent'), {
 
 // メタデータを動的に生成
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug);
+  const post = await getSupabasePostBySlug(params.slug);
   
   if (!post) {
     return {
@@ -31,11 +32,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 // 静的生成のためのパスを生成
 export async function generateStaticParams() {
-  return getAllPostSlugs();
+  return await getSupabaseAllPostSlugs();
 }
 
 export default async function BlogPost({ params }: { params: { slug: string } }) {
-  const post = await getPostBySlug(params.slug);
+  const post = await getSupabasePostBySlug(params.slug);
   
   if (!post) {
     notFound();
@@ -74,9 +75,17 @@ export default async function BlogPost({ params }: { params: { slug: string } })
           {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
               {post.frontmatter.tags.map((tag: string) => (
-                <span key={tag} className="px-3 py-1 bg-blue-900/30 text-blue-300 text-xs rounded-full">
+                <Link
+                  href={`/blog/tag/${encodeURIComponent(tag)}`}
+                  key={tag} 
+                  className="px-3 py-1.5 text-sm rounded-full transition-colors duration-200 hover:opacity-80"
+                  style={{
+                    backgroundColor: 'color-mix(in oklab, var(--color-blue-900) 30%, transparent)',
+                    color: 'var(--color-blue-300)'
+                  }}
+                >
                   {tag}
-                </span>
+                </Link>
               ))}
             </div>
           )}

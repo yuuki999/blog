@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/utils/supabase';
+import { revalidatePath } from 'next/cache';
 
 // 特定の記事を取得するAPI
 export async function GET(request: Request, { params }: { params: { id: string } }) {
@@ -106,6 +107,13 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       }
     }
 
+    // キャッシュを再検証
+    revalidatePath('/dashboard/posts');
+    revalidatePath('/blog');
+    if (body.slug) {
+      revalidatePath(`/blog/${body.slug}`);
+    }
+    
     return NextResponse.json(post);
   } catch (error) {
     console.error('記事更新エラー:', error);

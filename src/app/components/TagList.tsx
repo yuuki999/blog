@@ -23,7 +23,11 @@ export default function TagList({ tags, className = '' }: TagListProps) {
           <Link 
             href={`/blog/tag/${encodeURIComponent(tag)}`} 
             key={tag}
-            className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-blue-300 hover:text-blue-200 text-sm rounded-full transition-colors duration-200"
+            className="px-3 py-1.5 text-sm rounded-full transition-colors duration-200 hover:opacity-80"
+            style={{
+              backgroundColor: 'color-mix(in oklab, var(--color-blue-900) 30%, transparent)',
+              color: 'var(--color-blue-300)'
+            }}
           >
             {tag}
           </Link>

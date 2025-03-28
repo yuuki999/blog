@@ -7,6 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
 import Image from 'next/image';
+import TagSelector from './TagSelector';
+import ImageUploader from './ImageUploader';
 
 // フォームのバリデーションスキーマ
 const postSchema = z.object({
@@ -31,8 +33,8 @@ export default function PostForm({ post }: PostFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [tagInput, setTagInput] = useState('');
   const [availableTags, setAvailableTags] = useState<string[]>([]);
+  const [showImageUploader, setShowImageUploader] = useState(false);
   
   // React Hook Formの設定
   const { 
@@ -59,22 +61,7 @@ export default function PostForm({ post }: PostFormProps) {
   const watchTags = watch('tags');
   const watchThumbnail = watch('thumbnail_url');
   
-  // 利用可能なタグを取得
-  useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const response = await fetch('/api/tags');
-        if (response.ok) {
-          const data = await response.json();
-          setAvailableTags(data.map((tag: any) => tag.name));
-        }
-      } catch (error) {
-        console.error('タグ取得エラー:', error);
-      }
-    };
-    
-    fetchTags();
-  }, []);
+
   
   // フォーム送信処理
   const onSubmit = async (data: PostFormData) => {
@@ -119,25 +106,20 @@ export default function PostForm({ post }: PostFormProps) {
     }
   };
   
-  // タグを追加
-  const addTag = () => {
-    if (tagInput.trim() && !watchTags?.includes(tagInput.trim())) {
-      setValue('tags', [...(watchTags || []), tagInput.trim()]);
-      setTagInput('');
-    }
+  // タグが変更されたときの処理
+  const handleTagsChange = (newTags: string[]) => {
+    setValue('tags', newTags);
   };
   
-  // タグを削除
-  const removeTag = (tagToRemove: string) => {
-    setValue(
-      'tags',
-      (watchTags || []).filter(tag => tag !== tagToRemove)
-    );
+  // 画像アップローダーの表示切り替え
+  const toggleImageUploader = () => {
+    setShowImageUploader(!showImageUploader);
   };
   
-  // 画像アップロードページを開く
-  const openImageUploader = () => {
-    window.open('/admin', '_blank');
+  // 画像がアップロードされたときの処理
+  const handleImageUploaded = (url: string) => {
+    setValue('thumbnail_url', url);
+    setShowImageUploader(false);
   };
   
   return (
@@ -196,34 +178,51 @@ export default function PostForm({ post }: PostFormProps) {
       
       {/* サムネイル */}
       <div>
-        <label htmlFor="thumbnail_url" className="block text-white font-medium mb-2">サムネイル画像URL</label>
-        <div className="flex space-x-2">
-          <input
-            id="thumbnail_url"
-            type="text"
-            {...register('thumbnail_url')}
-            className="flex-1 px-4 py-2 bg-slate-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            type="button"
-            onClick={openImageUploader}
-            className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700"
-          >
-            画像アップロード
-          </button>
-        </div>
+        <label htmlFor="thumbnail_url" className="block text-white font-medium mb-2">サムネイル画像</label>
         
-        {watchThumbnail && (
-          <div className="mt-4">
-            <p className="text-white font-medium mb-2">プレビュー：</p>
-            <div className="relative w-full h-40 rounded-lg overflow-hidden bg-slate-900">
-              <Image 
-                src={watchThumbnail}
-                alt="サムネイルプレビュー"
-                fill
-                className="object-cover"
+        {!showImageUploader ? (
+          <>
+            <div className="flex space-x-2">
+              <input
+                id="thumbnail_url"
+                type="text"
+                {...register('thumbnail_url')}
+                className="flex-1 px-4 py-2 bg-slate-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="画像URLまたはアップロードしてください"
               />
+              <button
+                type="button"
+                onClick={toggleImageUploader}
+                className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700"
+              >
+                画像アップロード
+              </button>
             </div>
+            
+            {watchThumbnail && (
+              <div className="mt-4">
+                <p className="text-white font-medium mb-2">プレビュー：</p>
+                <div className="relative w-full h-40 rounded-lg overflow-hidden bg-slate-900">
+                  <Image 
+                    src={watchThumbnail}
+                    alt="サムネイルプレビュー"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="mt-2">
+            <ImageUploader onImageUploaded={handleImageUploaded} />
+            <button
+              type="button"
+              onClick={toggleImageUploader}
+              className="mt-4 px-4 py-2 bg-slate-600 text-white rounded-md hover:bg-slate-700"
+            >
+              キャンセル
+            </button>
           </div>
         )}
       </div>
@@ -231,45 +230,10 @@ export default function PostForm({ post }: PostFormProps) {
       {/* タグ */}
       <div>
         <label htmlFor="tags" className="block text-white font-medium mb-2">タグ</label>
-        <div className="flex space-x-2">
-          <input
-            id="tag-input"
-            type="text"
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-            className="flex-1 px-4 py-2 bg-slate-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="タグを入力して Enter または 追加ボタンをクリック"
-            list="available-tags"
-          />
-          <datalist id="available-tags">
-            {availableTags.map((tag) => (
-              <option key={tag} value={tag} />
-            ))}
-          </datalist>
-          <button
-            type="button"
-            onClick={addTag}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            追加
-          </button>
-        </div>
-        
-        <div className="flex flex-wrap gap-2 mt-3">
-          {watchTags?.map((tag) => (
-            <div key={tag} className="flex items-center bg-blue-900/30 text-blue-300 px-3 py-1 rounded-full">
-              <span>{tag}</span>
-              <button
-                type="button"
-                onClick={() => removeTag(tag)}
-                className="ml-2 text-blue-300 hover:text-blue-100"
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </div>
+        <TagSelector 
+          selectedTags={watchTags || []} 
+          onTagsChange={handleTagsChange} 
+        />
       </div>
       
       {/* 本文 */}

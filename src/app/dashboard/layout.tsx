@@ -13,9 +13,9 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="min-h-screen bg-slate-900">
-      <div className="flex">
+      <div className="container mx-auto px-4 flex">
         {/* サイドバーナビゲーション */}
-        <div className="w-64 bg-slate-800 min-h-screen p-4 fixed">
+        <div className="w-64 bg-slate-800 min-h-screen p-4 sticky top-0 h-screen overflow-y-auto z-10">
           <div className="mb-8">
             <h1 className="text-xl font-bold text-white">ブログ管理</h1>
           </div>
@@ -44,7 +44,7 @@ export default function DashboardLayout({
         </div>
         
         {/* メインコンテンツ */}
-        <div className="ml-64 flex-1 p-8">
+        <div className="flex-1 p-8">
           {children}
         </div>
       </div>

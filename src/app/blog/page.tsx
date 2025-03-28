@@ -1,4 +1,4 @@
-import { getBlogPosts } from '@/utils/blog';
+import { getSupabasePosts, getSupabaseTags } from '@/utils/supabase-blog';
 import BlogCard from '../components/BlogCard';
 import Link from 'next/link';
 import Pagination from '../components/Pagination';
@@ -11,8 +11,8 @@ export const metadata = {
 };
 
 // メインページコンポーネント
-export default function BlogPage({ searchParams }: { searchParams: { page?: string } }) {
-  const allPosts = getBlogPosts();
+export default async function BlogPage({ searchParams }: { searchParams: { page?: string } }) {
+  const allPosts = await getSupabasePosts();
   
   // ページネーションの設定
   const postsPerPage = 10;
@@ -57,7 +57,7 @@ export default function BlogPage({ searchParams }: { searchParams: { page?: stri
             
             {/* タグ一覧 */}
             <TagList 
-              tags={allPosts.flatMap(post => post.tags || [])} 
+              tags={await getSupabaseTags()} 
               className="bg-slate-800 rounded-lg p-6 mt-8" 
             />
           </div>

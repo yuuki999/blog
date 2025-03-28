@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getBlogPosts } from '@/utils/blog';
+import { getSupabasePostsByTag, getSupabaseTags } from '@/utils/supabase-blog';
 import { Metadata } from 'next';
 import BlogCard from '@/app/components/BlogCard';
 import TagList from '@/app/components/TagList';
@@ -16,26 +16,21 @@ export async function generateMetadata({ params }: { params: { tag: string } }):
 
 // 静的生成のためのパスを生成
 export async function generateStaticParams() {
-  const posts = getBlogPosts();
-  const allTags = posts.flatMap(post => post.tags || []);
-  const uniqueTags = Array.from(new Set(allTags));
+  const tags = await getSupabaseTags();
   
-  return uniqueTags.map(tag => ({
+  return tags.map(tag => ({
     tag: encodeURIComponent(tag),
   }));
 }
 
-export default function TagPage({ params }: { params: { tag: string } }) {
+export default async function TagPage({ params }: { params: { tag: string } }) {
   const tag = decodeURIComponent(params.tag);
-  const allPosts = getBlogPosts();
   
-  // 指定されたタグを持つ記事のみをフィルタリング
-  const filteredPosts = allPosts.filter(post => 
-    post.tags && post.tags.includes(tag)
-  );
+  // 指定されたタグを持つ記事を取得
+  const filteredPosts = await getSupabasePostsByTag(tag);
   
-  // すべての記事からタグを収集
-  const allTags = allPosts.flatMap(post => post.tags || []);
+  // すべてのタグを取得
+  const allTags = await getSupabaseTags();
   
   return (
     <div className="min-h-screen">
@@ -68,9 +63,11 @@ export default function TagPage({ params }: { params: { tag: string } }) {
         </h1>
         
         {filteredPosts.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 mb-12">
+          <div className="space-y-6 mb-12">
             {filteredPosts.map((post) => (
-              <BlogCard key={post.slug} post={post} />
+              <div key={post.slug} className="bg-slate-700 rounded-lg overflow-hidden shadow-md hover:shadow-lg transform hover:scale-102 transition-all duration-300">
+                <BlogCard key={post.slug} post={post} />
+              </div>
             ))}
           </div>
         ) : (
