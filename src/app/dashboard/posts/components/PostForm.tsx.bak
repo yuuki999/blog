@@ -44,9 +44,21 @@ export default function PostForm({ post }: PostFormProps) {
   const [editorView, setEditorView] = useState<'edit' | 'split' | 'preview'>('split');
   const [showEditorModal, setShowEditorModal] = useState(false);
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
-  const [highlightedContent, setHighlightedContent] = useState<string>('');
-  const isFirstRender = useRef(true); // 初回レンダリングかどうかを追跡するためのref
+  const [imageTagsCount, setImageTagsCount] = useState(0);
+
+  
+  // 画像タグをカウントする関数
+  const countImageTags = useCallback((content: string) => {
+    if (!content) return;
     
+    // Markdownの画像タグを検出する正規表現
+    const imageTagRegex = /!\[([^\]]*)\]\(([^\)]*)\)/g;
+    const matches = content.match(imageTagRegex);
+    
+    // 画像タグの数を更新
+    setImageTagsCount(matches ? matches.length : 0);
+  }, []);
+  
   // React Hook Formの設定
   const { 
     register, 
@@ -71,17 +83,28 @@ export default function PostForm({ post }: PostFormProps) {
   
   // 初期化時にデータが正しく設定されるようにする
   useEffect(() => {
-    // 初回レンダリング時のみ値を設定し、それ以降は上書きしない
-    if (isFirstRender.current && post?.content) {
+    if (post?.content) {
       setValue('content', post.content);
-      console.log('記事本文を初期設定しました:', post.content);
-      isFirstRender.current = false;
+      console.log('記事本文を設定しました:', post.content);
+      // 画像タグの数をカウント
+      countImageTags(post.content);
     }
-  }, [post, setValue]);
+  }, [post, setValue, countImageTags]);
   
   const watchTags = watch('tags');
   const watchThumbnail = watch('thumbnail_url');
   const watchContent = watch('content');
+  
+  // デバッグ用
+  useEffect(() => {
+    console.log('現在の本文内容:', watchContent);
+    if (watchContent) {
+      // 画像タグの数をカウント
+      countImageTags(watchContent);
+    }
+  }, [watchContent, countImageTags]);
+  
+
   
   // フォーム送信処理
   const onSubmit = async (data: PostFormData) => {
@@ -340,85 +363,22 @@ export default function PostForm({ post }: PostFormProps) {
                   {/* エディタ */}
                   {(editorView === 'edit' || editorView === 'split') && (
                     <div className="h-full mb-4 md:mb-0">
-                      <div className="relative h-full content-container">
+                      <div className="relative h-full">
                         <textarea
                           {...register('content')}
                           ref={contentTextareaRef}
                           className="w-full h-full px-4 py-2 bg-slate-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono resize-none"
-                          value={watch('content') || ''}
-                          onChange={(e) => {
-                            // テキストエリアの変更をフォームに反映
-                            setValue('content', e.target.value, { shouldValidate: true });
-                          }}
-                          onKeyDown={(e) => {
-                            // 画像タグの削除をサポート
-                            const textarea = e.target as HTMLTextAreaElement;
-                            const cursorPos = textarea.selectionStart;
-                            const content = textarea.value;
-                            
-                            // 選択範囲がある場合は通常の削除動作を許可
-                            if (textarea.selectionStart !== textarea.selectionEnd) {
-                              return;
-                            }
-                            
-                            // Backspaceキーが押された場合の処理
-                            if (e.key === 'Backspace' && cursorPos > 0) {
-                              // カーソル位置の前に画像タグがあるか確認
-                              const beforeCursor = content.substring(0, cursorPos);
-                              
-                              // 完全な画像タグを検出する正規表現
-                              // カーソルの直前が画像タグの終了位置か確認
-                              const imageTagRegex = /!\[([^\]]*)\]\(([^\)]*)\)$/;
-                              const match = beforeCursor.match(imageTagRegex);
-                              
-                              if (match) {
-                                // 画像タグ全体を削除
-                                e.preventDefault(); // デフォルトの削除動作を防止
-                                const newContent = 
-                                  content.substring(0, cursorPos - match[0].length) + 
-                                  content.substring(cursorPos);
-                                
-                                // フォームの値を更新
-                                setValue('content', newContent, { shouldValidate: true });
-                                
-                                // カーソル位置を更新
-                                setTimeout(() => {
-                                  textarea.focus();
-                                  const newPosition = cursorPos - match[0].length;
-                                  textarea.setSelectionRange(newPosition, newPosition);
-                                }, 0);
-                              }
-                            }
-                            
-                            // Deleteキーが押された場合の処理
-                            if (e.key === 'Delete' && cursorPos < content.length) {
-                              // カーソル位置の後に画像タグがあるか確認
-                              const afterCursor = content.substring(cursorPos);
-                              
-                              // 完全な画像タグを検出する正規表現
-                              // カーソルの直後が画像タグの開始位置か確認
-                              const imageTagRegex = /^!\[([^\]]*)\]\(([^\)]*)\)/;
-                              const match = afterCursor.match(imageTagRegex);
-                              
-                              if (match) {
-                                // 画像タグ全体を削除
-                                e.preventDefault(); // デフォルトの削除動作を防止
-                                const newContent = 
-                                  content.substring(0, cursorPos) + 
-                                  content.substring(cursorPos + match[0].length);
-                                
-                                // フォームの値を更新
-                                setValue('content', newContent, { shouldValidate: true });
-                                
-                                // カーソル位置を維持
-                                setTimeout(() => {
-                                  textarea.focus();
-                                  textarea.setSelectionRange(cursorPos, cursorPos);
-                                }, 0);
-                              }
-                            }
-                          }}
+                          defaultValue={post?.content || ''}
+                          onChange={(e) => countImageTags(e.target.value)}
                         />
+                        {imageTagsCount > 0 && (
+                          <div className="absolute top-2 right-2 bg-blue-600 text-white p-2 rounded-md flex items-center text-xs">
+                            <FileImage size={14} className="mr-1" />
+                            <span>{imageTagsCount}枚の画像が挿入されています</span>
+                          </div>
+                        )}
+                        
+
                       </div>
                     </div>
                   )}
@@ -426,7 +386,7 @@ export default function PostForm({ post }: PostFormProps) {
                   {/* プレビュー */}
                   {(editorView === 'preview' || editorView === 'split') && (
                     <div className="h-full bg-white dark:bg-slate-800 rounded-md overflow-auto border border-slate-300 dark:border-slate-600">
-                      <div className="p-4 prose prose-slate prose-sm max-w-none text-gray-800 dark:prose-invert dark:text-gray-200">
+                      <div className="p-4 prose prose-slate prose-sm max-w-none text-gray-800 dark:text-gray-200"-800 dark:prose-invert dark:text-gray-200">
                         {watchContent ? (
                           <div className="break-words">
                             <ReactMarkdown
@@ -495,6 +455,9 @@ export default function PostForm({ post }: PostFormProps) {
                         
                         // フォームの値を更新
                         setValue('content', newContent, { shouldValidate: true });
+                        
+                        // 画像タグをカウント
+                        countImageTags(newContent);
                         
                         // カーソル位置を更新
                         setTimeout(() => {

@@ -5,6 +5,7 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
+    const folder = formData.get('folder') as string || 'general';
     
     if (!file) {
       return NextResponse.json(
@@ -14,14 +15,14 @@ export async function POST(request: Request) {
     }
 
     // ファイル名を生成（一意になるように）
-    const filename = `${Date.now()}-${file.name}`;
+    const filename = `${folder}/${Date.now()}-${file.name}`;
     
     // Blobにアップロード
     const blob = await put(filename, file, {
       access: 'public',
     });
 
-    console.log('アップロード成功');
+    console.log(`アップロード成功: ${filename}`);
 
     return NextResponse.json(blob);
   } catch (error) {

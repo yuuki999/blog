@@ -2,16 +2,19 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { Upload, X } from 'lucide-react';
 
-interface ImageUploaderProps {
-  onImageUploaded: (url: string) => void;
+interface MarkdownImageUploaderProps {
+  onImageInsert: (markdownImageTag: string) => void;
+  onClose: () => void;
 }
 
-export default function ImageUploader({ onImageUploaded }: ImageUploaderProps) {
+export default function MarkdownImageUploader({ onImageInsert, onClose }: MarkdownImageUploaderProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [altText, setAltText] = useState('');
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
@@ -56,8 +59,11 @@ export default function ImageUploader({ onImageUploaded }: ImageUploaderProps) {
 
       const blob = await response.json();
       
-      // 親コンポーネントに通知
-      onImageUploaded(blob.url);
+      // Markdown形式の画像タグを生成して親コンポーネントに通知
+      const imageAlt = altText || '画像';
+      const markdownImageTag = `![${imageAlt}](${blob.url})`;
+      onImageInsert(markdownImageTag);
+      onClose();
     } catch (error: any) {
       setError(error.message || '画像のアップロード中にエラーが発生しました');
     } finally {
@@ -66,7 +72,18 @@ export default function ImageUploader({ onImageUploaded }: ImageUploaderProps) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="bg-slate-800 p-4 rounded-lg shadow-lg space-y-4 w-full max-w-md">
+      <div className="flex justify-between items-center">
+        <h3 className="text-white font-medium">Markdown画像の挿入</h3>
+        <button
+          type="button"
+          onClick={onClose}
+          className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-slate-700"
+        >
+          <X size={20} />
+        </button>
+      </div>
+
       {error && (
         <div className="bg-red-900/50 text-red-200 p-3 rounded-md text-sm">
           {error}
@@ -88,6 +105,18 @@ export default function ImageUploader({ onImageUploaded }: ImageUploaderProps) {
         </label>
       </div>
 
+      <div>
+        <label htmlFor="alt-text" className="block text-white font-medium mb-2">代替テキスト (alt)</label>
+        <input
+          id="alt-text"
+          type="text"
+          value={altText}
+          onChange={(e) => setAltText(e.target.value)}
+          placeholder="画像の説明を入力（SEOに重要）"
+          className="w-full px-4 py-2 bg-slate-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
       {preview && (
         <div className="mt-4">
           <p className="text-white font-medium mb-2">プレビュー：</p>
@@ -101,11 +130,17 @@ export default function ImageUploader({ onImageUploaded }: ImageUploaderProps) {
           </div>
           
           <button
+            type="button"
             onClick={handleUpload}
-            disabled={uploading || !file}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 w-full"
+            disabled={uploading}
+            className="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-slate-500 disabled:cursor-not-allowed flex items-center justify-center"
           >
-            {uploading ? 'アップロード中...' : 'アップロードする'}
+            {uploading ? 'アップロード中...' : (
+              <>
+                <Upload size={16} className="mr-2" />
+                アップロードして挿入
+              </>
+            )}
           </button>
         </div>
       )}
