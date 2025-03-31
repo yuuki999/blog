@@ -40,6 +40,15 @@ function Header() {
                     className={styles.icon}
                   />
                 </a>
+                <a href="https://note.com/yuki_itoi" target="_blank" rel="noopener noreferrer">
+                  <Image
+                    src="/images/note-icon.png"
+                    alt="Note"
+                    width={24}
+                    height={24}
+                    className={styles.icon}
+                  />
+                </a>
               </div>
             </div>
             <div className={styles.bottomRow}>
