@@ -5,51 +5,66 @@ import Link from 'next/link';
 
 type ServiceItem = {
     title: string;
-    // icon: string;
+    icon: string;
     description: string;
-    price: string;
+    category: string;
     value: string;
 }
 
 const serviceItems: ServiceItem[] = [
   {
-    title: "大宮・埼玉 無料IT相談",
-    // icon: "/images/consultation.svg",
-    description: "大宮市を中心とした埼玉県内のお客様のニーズや予算、目標をヒアリングし、最適なWebサイト・システム構築プランをご提案します。地域ビジネスに特化したIT相談を承ります。",
-    price: "無料",
-    value: "free_consultation"
+    title: "AI駆動開発トレーニング",
+    icon: "/images/ai-training.svg",
+    description: "最新のAI技術を活用した開発手法を学び、開発効率を飛躍的に向上させるためのトレーニングプログラムを提供します。個人のスキルアップから企業全体のDX推進まで対応します。",
+    category: "教育",
+    value: "ai_training"
   },
   {
-    title: "大宮向けテンプレートプラン",
-    // icon: "/images/template.svg",
-    description: "埼玉県大宮市の地域ビジネスに最適化された既存のテンプレートをベースに、迅速かつコスト効率の良いWebサイトを構築します。地域SEO対策込み。",
-    price: "プラン A",
-    value: "template_plan"
+    title: "AI活用コンサルティング",
+    icon: "/images/ai-consulting.svg",
+    description: "あなたのビジネスや業務プロセスにAIをどのように導入すべきか、具体的な活用方法と導入戦略をご提案します。レガシーな業務からの脱却を支援します。",
+    category: "コンサルティング",
+    value: "ai_consulting"
   },
   {
-    title: "埼玉ビジネス向けフルカスタマイズ",
-    // icon: "/images/custom.svg",
-    description: "大宮・埼玉のビジネスニーズに合わせて、完全にフルスクラッチでWebサイト・システムを構築いたします。地域特性を活かした柔軟なデザイン、機能を追加することが可能です。",
-    price: "プラン B",
-    value: "full_customization"
+    title: "受託開発サービス",
+    icon: "/images/development.svg",
+    description: "AI技術を活用した効率的な開発手法で、Webアプリケーション、業務システム、モバイルアプリなどの開発を承ります。最新技術と豊富な経験で、高品質な成果物を提供します。",
+    category: "開発",
+    value: "custom_development"
   },
   {
-    title: "大宮エリア 改修・リプレイス",
-    // icon: "/images/upgrade.svg",
-    description: "埼玉県大宮市周辺のビジネス向けに、既存のWebサイトの改善、最新技術へのアップグレード、全面的なリニューアル・データベースのパフォーマンス改善等に対応します。",
-    price: "プラン C",
-    value: "upgrade_replace"
+    title: "レガシーシステム刷新",
+    icon: "/images/legacy-renewal.svg",
+    description: "古いシステムや非効率な業務プロセスを最新技術で刷新し、業務効率と競争力を向上させます。段階的な移行計画から実装まで、リスクを最小限に抑えた移行を実現します。",
+    category: "開発",
+    value: "legacy_renewal"
+  },
+  {
+    title: "新規サービス開発",
+    icon: "/images/new-service.svg",
+    description: "アイデアの段階から市場投入まで、新規サービスの開発をトータルサポート。AI技術を活用したプロトタイピングで、短期間での検証と改善を繰り返し、成功確率を高めます。",
+    category: "開発",
+    value: "new_service"
+  },
+  {
+    title: "最新技術POC",
+    icon: "/images/poc.svg",
+    description: "最新のAI技術や開発手法の概念実証（POC）を実施。ビジネスへの導入前に技術の有効性を検証し、リスクを最小化しながら革新的な技術導入を支援します。",
+    category: "研究開発",
+    value: "tech_poc"
   }
 ];
 
 function ServiceItem({ item }: { item: ServiceItem }) {
   return (
     <Link href={`/contact?serviceType=${item.value}`} className={styles.serviceLink}>
-      <div className={`${styles.serviceItem} ${item.price === "無料" ? styles.freeConsultation : ''}`}>
+      <div className={styles.serviceItem}>
+        {/* アイコン画像が用意できたら有効化 */}
         {/* <Image src={item.icon} width={60} height={60} alt={item.title} /> */}
+        <div className={styles.serviceCategory}>{item.category}</div>
         <h3>{item.title}</h3>
         <p>{item.description}</p>
-        <div className={styles.servicePrice}>{item.price}</div>
       </div>
     </Link>
   );
@@ -60,8 +75,8 @@ function Services() {
     <section id="service" className={styles.services}>
       <h2>Services</h2>
       <p className={styles.serviceIntro}>
-        予算、納期、カスタマイズ性に応じて、最適なwebサイト構築プランをご提案します。<br/>
-        システムに関するご依頼が初めての方は、お気軽に無料相談からお問い合わせください。<br/>
+        AI駆動開発の教育から、実際の開発支援、受託開発まで幅広いサービスを提供します。<br/>
+        レガシーシステムの刷新、新規サービス開発、最新技術のPOCなど、お客様のニーズに合わせた最適なソリューションをご提案します。<br/>
       </p>
       
       {/* <div className={styles.servicesGrid}>
