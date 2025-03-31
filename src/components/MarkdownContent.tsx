@@ -23,16 +23,17 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({ content }) => {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          // 見出しレベルのカスタマイズ
-          h1: (props) => <h1 className="text-3xl font-bold my-4 text-white" {...props} />,
-          h2: (props) => <h2 className="text-2xl font-bold my-3 text-white" {...props} />,
-          h3: (props) => <h3 className="text-xl font-bold my-2 text-white" {...props} />,
-          // 段落のカスタマイズ
-          p: (props) => <p className="my-3 text-gray-300 leading-relaxed" {...props} />,
-          // リストのカスタマイズ
-          ul: (props) => <ul className="list-disc pl-6 my-3 text-gray-300" {...props} />,
-          ol: (props) => <ol className="list-decimal pl-6 my-3 text-gray-300" {...props} />,
-          li: (props) => <li className="text-gray-300 mb-1" {...props} />,
+          // 見出しレベルのカスタマイズ - 間隔を広げる
+          h1: (props) => <h1 className="text-3xl font-bold mt-8 mb-12 pb-2 text-white" {...props} />,
+          h2: (props) => <h2 className="text-2xl font-bold mt-16 mb-4 pb-1 text-white" {...props} />,
+          h3: (props) => <h3 className="text-xl font-bold mt-5 mb-3 text-white" {...props} />,
+          h4: (props) => <h4 className="text-lg font-bold mt-4 mb-2 text-white" {...props} />,
+          // 段落のカスタマイズ - 行間と上下マージンを調整
+          p: (props) => <p className="my-4 text-gray-300 leading-relaxed" {...props} />,
+          // リストのカスタマイズ - マージンを増やす
+          ul: (props) => <ul className="list-disc pl-6 my-4 text-gray-300" {...props} />,
+          ol: (props) => <ol className="list-decimal pl-6 my-4 text-gray-300" {...props} />,
+          li: (props) => <li className="text-gray-300 mb-2" {...props} />,
           // リンクのカスタマイズ
           a: (props) => <a className="text-blue-400 hover:underline" {...props} />,
           // 強調のカスタマイズ

@@ -150,17 +150,6 @@ export default function PostForm({ post }: PostFormProps) {
   
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {error && (
-        <div className="bg-red-900/50 text-red-200 p-4 rounded-md">
-          {error}
-        </div>
-      )}
-      
-      {success && (
-        <div className="bg-green-900/50 text-green-200 p-4 rounded-md">
-          {success}
-        </div>
-      )}
       
       {/* タイトル */}
       <div>
@@ -432,28 +421,32 @@ export default function PostForm({ post }: PostFormProps) {
                             <ReactMarkdown
                               remarkPlugins={[remarkGfm]}
                               components={{
-                                p: ({node, ...props}) => <p className="my-2" {...props} />,
-                                h1: ({node, ...props}) => <h1 className="text-2xl font-bold mt-4 mb-2" {...props} />,
-                                h2: ({node, ...props}) => <h2 className="text-xl font-bold mt-3 mb-2" {...props} />,
-                                ul: ({node, ...props}) => <ul className="list-disc pl-5 my-2" {...props} />,
-                                ol: ({node, ...props}) => <ol className="list-decimal pl-5 my-2" {...props} />,
-                                li: ({node, ...props}) => <li className="my-1" {...props} />,
+                                p: ({node, ...props}) => <p className="my-4" {...props} />,
+                                h1: ({node, ...props}) => <h1 className="text-2xl font-bold mt-8 mb-4" {...props} />,
+                                h2: ({node, ...props}) => <h2 className="text-xl font-bold mt-6 mb-3" {...props} />,
+                                h3: ({node, ...props}) => <h3 className="text-lg font-bold mt-5 mb-2" {...props} />,
+                                h4: ({node, ...props}) => <h4 className="text-base font-bold mt-4 mb-2" {...props} />,
+                                ul: ({node, ...props}) => <ul className="list-disc pl-5 my-4" {...props} />,
+                                ol: ({node, ...props}) => <ol className="list-decimal pl-5 my-4" {...props} />,
+                                li: ({node, ...props}) => <li className="my-2" {...props} />,
                                 a: ({node, ...props}) => <a className="text-blue-500 hover:underline" {...props} />,
-                                blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-gray-300 pl-4 my-2 italic" {...props} />,
+                                blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-gray-300 pl-4 my-4 italic" {...props} />,
+                                pre: ({node, ...props}) => <pre className="bg-slate-900 p-4 rounded-md my-4 overflow-x-auto" {...props} />,
+                                hr: () => <hr className="my-6 border-t border-slate-300 dark:border-slate-600" />,
                                 code: ({inline, className, children, ...props}: any) => {
                                   const match = /language-(\w+)/.exec(className || '');
                                   return !inline ? (
-                                    <pre className="bg-gray-100 dark:bg-gray-800 p-2 rounded overflow-auto my-2">
+                                    <pre className="bg-slate-900 p-4 rounded-md my-4 overflow-x-auto">
                                       <code className={className} {...props}>
                                         {children}
                                       </code>
                                     </pre>
                                   ) : (
-                                    <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded" {...props}>
+                                    <code className="bg-slate-800 px-1 py-0.5 rounded text-sm" {...props}>
                                       {children}
                                     </code>
                                   );
-                                }
+                                },
                               }}
                             >
                               {watchContent}
@@ -543,20 +536,35 @@ export default function PostForm({ post }: PostFormProps) {
       </div>
       
       {/* 送信ボタン */}
-      <div className="flex space-x-4">
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
-        >
-          {isSubmitting ? '保存中...' : '保存'}
-        </button>
-        <Link
-          href="/dashboard/posts"
-          className="px-6 py-2 bg-slate-600 text-white rounded-md hover:bg-slate-700"
-        >
-          キャンセル
-        </Link>
+      <div className="flex flex-col space-y-4">
+        <div className="flex space-x-4">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
+          >
+            {isSubmitting ? '保存中...' : '保存'}
+          </button>
+          <Link
+            href="/dashboard/posts"
+            className="px-6 py-2 bg-slate-600 text-white rounded-md hover:bg-slate-700"
+          >
+            キャンセル
+          </Link>
+        </div>
+        
+        {/* メッセージ表示部分 */}
+        {error && (
+          <div className="bg-red-900/50 text-red-200 p-4 rounded-md">
+            {error}
+          </div>
+        )}
+        
+        {success && (
+          <div className="bg-green-900/50 text-green-200 p-4 rounded-md animate-pulse">
+            {success}
+          </div>
+        )}
       </div>
     </form>
   );
