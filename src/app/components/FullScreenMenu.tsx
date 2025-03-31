@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from '../styles/full_screen_menu.module.scss';
 import { X, ArrowRight } from 'lucide-react';
 import { usePathname } from 'next/navigation';
@@ -15,6 +15,19 @@ interface FullScreenMenuProps {
 
 const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname();
+  
+  // ページ全体のスクロールを防止
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+  
   if (!isOpen) return null;
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -37,7 +50,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
   
   return (
     <div className={`${styles.fullScreenMenu} ${isOpen ? styles.open : ''}`}>
-      <button className={styles.closeButton} onClick={onClose}>
+      <button className={styles.closeButton} onClick={onClose} aria-label="メニューを閉じる">
         <span className={styles.closeText}>Close</span>
         <X size={24} />
       </button>

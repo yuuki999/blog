@@ -7,26 +7,31 @@
 }
 
 .menuButton {
-  background-color: #333;
+  background-color: rgba(30, 41, 59, 0.8);
   border: none;
   cursor: pointer;
-  width: 74px;
-  padding: 50px 0 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
   color: #ffffff;
-  position: fixed; // 固定位置に変更
-  top: -32px;
-  right: 0px;
+  position: fixed;
+  top: 16px;
+  right: 16px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(30, 41, 59, 0.95);
+    transform: scale(1.05);
+  }
 }
 
 .menuText {
-  font-size: 12px;
-  margin-bottom: 5px;
-  text-transform: uppercase;
+  display: none; // テキストを非表示にして、アイコンのみ表示
 }
 
 .mobileMenu {
