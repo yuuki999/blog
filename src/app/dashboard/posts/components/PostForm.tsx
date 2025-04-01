@@ -10,7 +10,7 @@ import Image from 'next/image';
 import TagSelector from './TagSelector';
 import ImageUploader from './ImageUploader';
 import MarkdownImageUploader from './MarkdownImageUploader';
-import { revalidateBlogCache } from '../actions';
+import { revalidateBlogCache, savePostWithFormData } from '../actions';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { X, Image as ImageIcon, FileImage } from 'lucide-react';
@@ -40,6 +40,8 @@ export default function PostForm({ post }: PostFormProps) {
   const [success, setSuccess] = useState<string | null>(null);
   const [availableTags, setAvailableTags] = useState<string[]>([]);
   const [showImageUploader, setShowImageUploader] = useState(false);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [showMarkdownImageUploader, setShowMarkdownImageUploader] = useState(false);
   const [editorView, setEditorView] = useState<'edit' | 'split' | 'preview'>('split');
   const [showEditorModal, setShowEditorModal] = useState(false);
@@ -90,33 +92,32 @@ export default function PostForm({ post }: PostFormProps) {
     setSuccess(null);
     
     try {
-      const url = data.id 
-        ? `/api/posts/${data.id}` 
-        : '/api/posts';
+      // FormDataを使用して画像ファイルと記事データを送信
+      const formData = new FormData();
       
-      const method = data.id ? 'PUT' : 'POST';
+      // 記事データをJSON文字列としてFormDataに追加
+      formData.append('postData', JSON.stringify(data));
       
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      // 画像ファイルがあればFormDataに追加
+      if (selectedImageFile) {
+        formData.append('image', selectedImageFile);
+      }
       
-      const result = await response.json();
+      // Server Actionを使用してFormDataを送信
+      const result = await savePostWithFormData(formData);
       
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || '記事の保存中にエラーが発生しました');
       }
       
       setSuccess('記事が保存されました');
       
-      // サーバーサイドのキャッシュを再検証
-      await revalidateBlogCache(data.slug);
-      
       // クライアントサイドのキャッシュも更新
       router.refresh();
+      
+      // 画像選択状態をリセット
+      setSelectedImageFile(null);
+      setImagePreview(null);
       
       // 新規作成の場合は成功メッセージ表示後に一覧画面にリダイレクト
       if (!data.id && result.id) {
@@ -142,9 +143,16 @@ export default function PostForm({ post }: PostFormProps) {
     setShowImageUploader(!showImageUploader);
   };
   
-  // 画像がアップロードされたときの処理
-  const handleImageUploaded = (url: string) => {
-    setValue('thumbnail_url', url);
+  // 画像が選択されたときの処理
+  const handleImageSelected = (file: File, previewUrl: string) => {
+    setSelectedImageFile(file);
+    setImagePreview(previewUrl);
+    setValue('thumbnail_url', previewUrl); // プレビュー表示用
+    setShowImageUploader(false);
+  };
+  
+  // 画像選択をキャンセルしたときの処理
+  const handleImageSelectCancel = () => {
     setShowImageUploader(false);
   };
   
@@ -214,30 +222,29 @@ export default function PostForm({ post }: PostFormProps) {
               </button>
             </div>
             
-            {watchThumbnail && (
+            {(watchThumbnail || imagePreview) && (
               <div className="mt-4">
                 <p className="text-white font-medium mb-2">プレビュー：</p>
                 <div className="relative w-full h-40 rounded-lg overflow-hidden bg-slate-900">
                   <Image 
-                    src={watchThumbnail}
+                    src={imagePreview || watchThumbnail || ''}
                     alt="サムネイルプレビュー"
                     fill
                     className="object-cover"
                   />
                 </div>
+                {selectedImageFile && (
+                  <p className="text-green-400 text-sm mt-2">画像が選択されました。記事保存時にアップロードされます。</p>
+                )}
               </div>
             )}
           </>
         ) : (
           <div className="mt-2">
-            <ImageUploader onImageUploaded={handleImageUploaded} />
-            <button
-              type="button"
-              onClick={toggleImageUploader}
-              className="mt-4 px-4 py-2 bg-slate-600 text-white rounded-md hover:bg-slate-700"
-            >
-              キャンセル
-            </button>
+            <ImageUploader 
+              onImageSelected={handleImageSelected} 
+              onCancel={handleImageSelectCancel} 
+            />
           </div>
         )}
       </div>
