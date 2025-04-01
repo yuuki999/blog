@@ -98,6 +98,8 @@ export default async function BlogPost({ params }: { params: { slug: string } })
                 fill
                 className="object-cover"
                 priority
+                quality={95}
+                sizes="(max-width: 768px) 100vw, 800px"
               />
             </div>
           )}

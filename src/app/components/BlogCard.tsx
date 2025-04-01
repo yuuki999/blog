@@ -43,10 +43,12 @@ export default function BlogCard({ post }: BlogCardProps) {
           <Image 
             src={thumbnailSrc}
             alt={post.title}
-            width={96}
-            height={96}
+            width={144}
+            height={144}
             className="object-cover w-full h-full"
             style={{ borderRadius: '0.5rem' }}
+            quality={85}
+            priority
           />
         </div>
         
