@@ -43,8 +43,10 @@ export default function PostForm({ post }: PostFormProps) {
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [showMarkdownImageUploader, setShowMarkdownImageUploader] = useState(false);
+  const [markdownUploaderTransition, setMarkdownUploaderTransition] = useState(false);
   const [editorView, setEditorView] = useState<'edit' | 'split' | 'preview'>('split');
   const [showEditorModal, setShowEditorModal] = useState(false);
+  const [modalTransition, setModalTransition] = useState(false);
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
   const [highlightedContent, setHighlightedContent] = useState<string>('');
   const isFirstRender = useRef(true); // 初回レンダリングかどうかを追跡するためのref
@@ -59,6 +61,8 @@ export default function PostForm({ post }: PostFormProps) {
     formState: { errors } 
   } = useForm<PostFormData>({
     resolver: zodResolver(postSchema),
+    
+
     defaultValues: {
       id: post?.id || undefined,
       title: post?.title || '',
@@ -70,6 +74,40 @@ export default function PostForm({ post }: PostFormProps) {
       tags: post?.tags || [],
     },
   });
+  
+  // エディタモーダルを開く処理
+  const openEditorModal = () => {
+    setShowEditorModal(true);
+    // モーダルが表示された直後にアニメーション用のクラスを有効にする
+    setTimeout(() => {
+      setModalTransition(true);
+    }, 10);
+  };
+  
+  // エディタモーダルを閉じる処理
+  const closeEditorModal = () => {
+    setModalTransition(false);
+    // アニメーション完了後にモーダルを非表示にする
+    setTimeout(() => {
+      setShowEditorModal(false);
+    }, 300); // トランジションの時間と合わせる
+  };
+  
+  // Markdown画像アップローダーモーダルを開く処理
+  const openMarkdownImageUploader = () => {
+    setShowMarkdownImageUploader(true);
+    setTimeout(() => {
+      setMarkdownUploaderTransition(true);
+    }, 10);
+  };
+  
+  // Markdown画像アップローダーモーダルを閉じる処理
+  const closeMarkdownImageUploader = () => {
+    setMarkdownUploaderTransition(false);
+    setTimeout(() => {
+      setShowMarkdownImageUploader(false);
+    }, 300);
+  };
   
   // 初期化時にデータが正しく設定されるようにする
   useEffect(() => {
@@ -264,7 +302,7 @@ export default function PostForm({ post }: PostFormProps) {
           <label htmlFor="content" className="text-white font-medium">本文 (Markdown形式)</label>
           <button
             type="button"
-            onClick={() => setShowEditorModal(true)}
+            onClick={openEditorModal}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             全画面エディタを開く
@@ -277,17 +315,31 @@ export default function PostForm({ post }: PostFormProps) {
             {...register('content')}
             rows={8}
             className="w-full px-4 py-2 bg-slate-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
-            onClick={() => setShowEditorModal(true)}
+            onClick={openEditorModal}
             defaultValue={post?.content || ''}
           />
         </div>
         
         {/* モーダルエディタ */}
         {showEditorModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75" onClick={(e) => {
-            if (e.target === e.currentTarget) setShowEditorModal(false);
-          }}>
-            <div className="bg-slate-900 w-full h-full md:w-11/12 md:h-5/6 md:rounded-lg overflow-hidden flex flex-col">
+          <>
+            {/* 半透明の背景オーバーレイ */}
+            <div 
+              className={`fixed inset-0 z-50 bg-black transition-opacity duration-300 ease-in-out ${
+                modalTransition ? 'opacity-60' : 'opacity-10'
+              }`} 
+              onClick={closeEditorModal}
+            />
+            
+            {/* エディタモーダル本体 */}
+            <div 
+              className={`fixed z-50 inset-0 flex items-center justify-center pointer-events-none`}
+            >
+              <div 
+                className={`bg-slate-900 w-full h-full md:w-11/12 md:h-5/6 md:rounded-lg overflow-hidden flex flex-col pointer-events-auto transition-transform duration-300 ease-in-out ${
+                  modalTransition ? 'scale-100' : 'scale-95 opacity-0'
+                }`}
+              >
               <div className="flex justify-between items-center p-4 bg-slate-800">
                 <div className="flex items-center space-x-2">
                   <div className="flex bg-slate-700 rounded-lg overflow-hidden">
@@ -315,8 +367,8 @@ export default function PostForm({ post }: PostFormProps) {
                   </div>
                   <button
                     type="button"
-                    onClick={() => setShowMarkdownImageUploader(true)}
-                    className="p-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 flex items-center"
+                    onClick={openMarkdownImageUploader}
+                    className="p-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 flex items-center transition-colors"
                     title="画像を挿入"
                   >
                     <ImageIcon size={20} />
@@ -324,8 +376,8 @@ export default function PostForm({ post }: PostFormProps) {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setShowEditorModal(false)}
-                  className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-slate-700"
+                  onClick={closeEditorModal}
+                  className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-slate-700 transition-colors"
                 >
                   <X size={24} />
                 </button>
@@ -471,7 +523,7 @@ export default function PostForm({ post }: PostFormProps) {
               <div className="p-4 bg-slate-800 flex justify-end">
                 <button
                   type="button"
-                  onClick={() => setShowEditorModal(false)}
+                  onClick={closeEditorModal}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                 >
                   編集完了
@@ -480,36 +532,54 @@ export default function PostForm({ post }: PostFormProps) {
               
               {/* Markdown画像アップローダー */}
               {showMarkdownImageUploader && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-75" onClick={(e) => {
-                  if (e.target === e.currentTarget) setShowMarkdownImageUploader(false);
-                }}>
-                  <MarkdownImageUploader 
-                    onImageInsert={(markdownImageTag) => {
-                      // テキストエリアのカーソル位置に画像タグを挿入
-                      const textarea = contentTextareaRef.current;
-                      if (textarea) {
-                        const start = textarea.selectionStart;
-                        const end = textarea.selectionEnd;
-                        const content = textarea.value;
-                        const newContent = content.substring(0, start) + markdownImageTag + content.substring(end);
-                        
-                        // フォームの値を更新
-                        setValue('content', newContent, { shouldValidate: true });
-                        
-                        // カーソル位置を更新
-                        setTimeout(() => {
-                          textarea.focus();
-                          const newPosition = start + markdownImageTag.length;
-                          textarea.setSelectionRange(newPosition, newPosition);
-                        }, 0);
-                      }
-                    }}
-                    onClose={() => setShowMarkdownImageUploader(false)}
+                <>
+                  {/* 半透明の背景オーバーレイ */}
+                  <div 
+                    className={`fixed inset-0 z-[60] bg-black transition-opacity duration-300 ease-in-out ${
+                      markdownUploaderTransition ? 'opacity-60' : 'opacity-10'
+                    }`} 
+                    onClick={closeMarkdownImageUploader}
                   />
-                </div>
+                  
+                  {/* アップローダーモーダル本体 */}
+                  <div
+                    className={`fixed z-[60] inset-0 flex items-center justify-center pointer-events-none`}
+                  >
+                    <div
+                      className={`bg-slate-900 rounded-lg overflow-hidden pointer-events-auto transition-transform duration-300 ease-in-out ${
+                        markdownUploaderTransition ? 'scale-100' : 'scale-95 opacity-0'
+                      }`}
+                    >
+                    <MarkdownImageUploader 
+                      onImageInsert={(markdownImageTag) => {
+                        // テキストエリアのカーソル位置に画像タグを挿入
+                        const textarea = contentTextareaRef.current;
+                        if (textarea) {
+                          const start = textarea.selectionStart;
+                          const end = textarea.selectionEnd;
+                          const content = textarea.value;
+                          const newContent = content.substring(0, start) + markdownImageTag + content.substring(end);
+                          
+                          // フォームの値を更新
+                          setValue('content', newContent, { shouldValidate: true });
+                          
+                          // カーソル位置を更新
+                          setTimeout(() => {
+                            textarea.focus();
+                            const newPosition = start + markdownImageTag.length;
+                            textarea.setSelectionRange(newPosition, newPosition);
+                          }, 0);
+                        }
+                      }}
+                      onClose={closeMarkdownImageUploader}
+                    />
+                    </div>
+                  </div>
+                </>
               )}
+              </div>
             </div>
-          </div>
+          </>
         )}
         
         {errors.content && (
