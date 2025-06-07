@@ -38,19 +38,14 @@ const Portfolio: React.FC = async () => {
       image: '/images/portfolio/photo_app.png'
     },
     { 
-      url: 'https://azure942162.studio.site', 
-      title: '会社HP サンプル',
-      image: '/images/portfolio/studio1.png'
+      url: 'https://docu-trans-wait-list-gqby.vercel.app/ja', 
+      title: 'エクセル一括翻訳アプリ',
+      image: '/images/portfolio/excel.png'
     },
     { 
-      url: 'https://white629331.studio.site/', 
-      title: 'パーソナルジムHP サンプル',
-      image: '/images/portfolio/studio2.png'
-    },
-    { 
-      url: 'https://yellow544103.studio.site/', 
-      title: '飲食店HP サンプル',
-      image: '/images/portfolio/studio3.png'
+      url: 'https://fencing-overlay.vercel.app/', 
+      title: 'フェンディング動画解説アプリ',
+      image: '/images/portfolio/fencing.png'
     },
   ];
 
