@@ -30,11 +30,15 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
   
   if (!isOpen) return null;
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, isExternal?: boolean) => {
     e.preventDefault();
     onClose();
 
-    if (href.startsWith('#')) {
+    if (isExternal) {
+      setTimeout(() => {
+        window.open(href, '_blank', 'noopener,noreferrer');
+      }, 300);
+    } else if (href.startsWith('#')) {
       setTimeout(() => {
         const element = document.querySelector(href);
         if (element) {
@@ -85,6 +89,12 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
               <li>
                 <a href="/contact" onClick={(e) => handleLinkClick(e, '/contact')}>
                   <span className={styles.menuText}>Contact</span>
+                  <ArrowRight size={24} className={styles.menuIcon} />
+                </a>
+              </li>
+              <li>
+                <a href="https://yuuki999.github.io/skill.io/" onClick={(e) => handleLinkClick(e, 'https://yuuki999.github.io/skill.io/', true)}>
+                  <span className={styles.menuText}>Skill</span>
                   <ArrowRight size={24} className={styles.menuIcon} />
                 </a>
               </li>

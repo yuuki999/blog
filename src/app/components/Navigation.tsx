@@ -14,7 +14,8 @@ const navItems = [
   { id: 'about', label: 'Profile', isInternal: true },
   { id: 'works', label: 'Works', isInternal: true },
   { id: 'blog', label: 'Blog', isInternal: false, href: '/blog' },
-  { id: 'contact', label: 'Contact', isInternal: false, href: '/contact' }
+  { id: 'contact', label: 'Contact', isInternal: false, href: '/contact' },
+  { id: 'skill', label: 'Skill', isInternal: false, href: 'https://yuuki999.github.io/skill.io/', isExternal: true }
 ];
 
 function Navigation() {
@@ -71,6 +72,15 @@ function Navigation() {
                     key={item.id}
                     href={`#${item.id}`}
                     onClick={scrollToSection(item.id)}
+                  >
+                    {item.label}
+                  </a>
+                ) : item.isExternal ? (
+                  <a
+                    key={item.id}
+                    href={item.href || '/'}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     {item.label}
                   </a>
