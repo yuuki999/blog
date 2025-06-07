@@ -11,7 +11,11 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:admin": "playwright test tests/e2e/admin",
     "test:e2e:blog": "playwright test tests/e2e/blog",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "db:migrate": "node scripts/migrate.js",
+    "db:migrate:up": "node scripts/migrate.js up",
+    "db:migrate:down": "node scripts/migrate.js down",
+    "db:migrate:status": "node scripts/migrate.js status"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.504.0",
